@@ -1,0 +1,24 @@
+name: Bash Script CI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.sh'
+      - '.github/workflows/bash-ci.yml'
+
+jobs:
+  ci-bash:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run ShellCheck on shell scripts
+        run: |
+          shopt -s globstar nullglob
+          files=(**/*.sh)
+          if [ ${#files[@]} -gt 0 ]; then
+            shellcheck "${files[@]}"
+          fi
